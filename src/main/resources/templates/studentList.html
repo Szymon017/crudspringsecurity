@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+<meta charset="ISO-8859-1">
+<title>Hello Thymeleaf</title>
+<!-- Latest compiled and minified CSS -->
+<link rel="stylesheet" th:href="@{/css/stylish.css}">
+</head>
+<body>
+	<div class="container">
+		<h1 align="center">Student List</h1>
+		<div class="row">
+
+			<div style="display: flex;justify-content: space-between;">
+			<a th:href="@{/studentForm}" class="btn btn-primary btn-sm mb-3"
+				style="height: 31px;margin-top: 5px;">AddStudent</a>
+		    <a th:href="@{/logout}" class="btn btn-danger"
+				style="margin-bottom: 5px;width: 100px;height: 36px;">Logout</a>
+			</div>		
+			    <div th:if="${param.notValidName}" class="alert alert-danger"
+				align="center">Update Faild!, Please Enter Valid Inputs</div>
+			    <div th:if="${param.notValidEmail}" class="alert alert-danger"
+				align="center">Update Faild!, Please Enter Valid Email</div>
+				<div th:if="${param.success}" class="alert alert-success"
+				align="center">Updated Successfully</div>
+				<div th:if="${param.notAdmin}" class="alert alert-danger"
+				align="center">You dont have permission, Only Admins can delete</div>
+
+			<table border="1"
+				class="table table-responsive table-bordered table-striped">
+				<thead>
+					<tr align="center">
+						<th>Student Name</th>
+						<th>Student Email</th>
+						<th >Student Adress</th>
+						<th style="width: 15%" >Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr th:each="student : ${students}">
+						<td th:text="${student.name}"></td>
+						<td th:text="${student.email}"></td>
+						<td th:text="${student.adress}"></td>
+						<td><a th:href="@{/studentFormForUpdate/{id}(id=${student.id})}"
+							class="btn btn-primary btn-sm mb-3">Update</a> 
+							<a th:href="@{/deleteStudent/{id}(id=${student.id})}"
+							class="btn btn-primary btn-sm mb-3" >Delete</a></td>
+
+
+					</tr>
+				</tbody>
+			</table>
+			<div th:if="${totalPages > 1}">
+				<div class="row col-sm-10">
+					<div class="col-sm-2">Total Rows: [[${totalItems}]]</div>
+					<div class="col-sm-1">
+						<span th:each="i: ${#numbers.sequence(1, totalPages)}"> <a
+							th:if="${currentPage != i}" th:href="@{'/page/' + ${i}}">[[${i}]]</a>
+							<span th:unless="${currentPage != i}">[[${i}]]</span> &nbsp;
+							&nbsp;
+						</span>
+					</div>
+					<div class="col-sm-1">
+						<a th:if="${currentPage < totalPages}"
+							th:href="@{'/page/' + ${currentPage + 1}}">Next</a> <span
+							th:unless="${currentPage < totalPages}">Next</span>
+					</div>
+
+				</div>
+			</div>
+		</div>
+	</div>
+
+</body>
+</html>
